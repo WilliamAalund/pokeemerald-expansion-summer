@@ -1,3 +1,7 @@
+OldaleTown_EventScript_ItemGreatBall::
+	finditem ITEM_GREAT_BALL
+	end
+
 Route102_EventScript_ItemPotion::
 	finditem ITEM_POTION
 	end
