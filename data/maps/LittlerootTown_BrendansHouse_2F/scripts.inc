@@ -127,10 +127,21 @@ LittlerootTown_BrendansHouse_2F_EventScript_MeetBrendanEast::
 	waitmovement 0
 	return
 
-LittlerootTown_BrendansHouse_2F_Movement_BrendanEnters:
-	walk_down
-	walk_down
-	walk_in_place_faster_left
+LittlerootTown_BrendansHouse_2F_EventScript_CheckIfClockSet::
+	call_if_eq VAR_LITTLEROOT_TOWN_STATE, 0, LittlerootTown_BrendansHouse_2F_EventScript_SetClockMessage
+	releaseall
+	end
+
+LittlerootTown_BrendansHouse_2F_EventScript_SetClockMessage::
+	msgbox PlayersHouse_2F_Text_SetClockReminder, MSGBOX_DEFAULT
+	closemessage
+	applymovement OBJ_EVENT_ID_PLAYER, LittlerootTown_BrendansHouse_2F_Movement_BrendanEnters
+	waitmovement 0
+	return
+
+LittlerootTown_BrendansHouse_2F_Movement_BrendanEnters: 
+	walk_left
+	walk_left
 	step_end
 
 LittlerootTown_BrendansHouse_2F_Movement_BrendanApproachPlayerNorth:
@@ -302,3 +313,7 @@ PlayersHouse_2F_Text_ItsAGameCube:
 	.string "It's a Nintendo GameCube.\p"
 	.string "A Game Boy Advance is connected to\n"
 	.string "serve as the Controller.$"
+
+PlayersHouse_2F_Text_SetClockReminder: 
+	.string "I should set my new clock before I\n"
+	.string "head downstairs.$"
