@@ -142,6 +142,7 @@ LittlerootTown_BrendansHouse_2F_EventScript_SetClockMessage::
 LittlerootTown_BrendansHouse_2F_Movement_BrendanEnters: 
 	walk_left
 	walk_left
+	face_up
 	step_end
 
 LittlerootTown_BrendansHouse_2F_Movement_BrendanApproachPlayerNorth:

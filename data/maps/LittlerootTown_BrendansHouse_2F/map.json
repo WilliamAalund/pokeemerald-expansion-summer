@@ -238,9 +238,9 @@
       "x": 7,
       "y": 2,
       "elevation": 0,
-      "var": "VAR_TEMP_0",
+      "var": "VAR_LITTLEROOT_TOWN_STATE",
       "var_value": "0",
-      "script": "LittlerootTown_BrendansHouse_2F_EventScript_CheckIfClockSet"
+      "script": "LittlerootTown_BrendansHouse_2F_EventScript_SetClockMessage"
     }
   ],
   "bg_events": [

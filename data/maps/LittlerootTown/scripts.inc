@@ -10,8 +10,8 @@ LittlerootTown_MapScripts::
 	.byte 0
 
 	@ State descriptions for VAR_LITTLEROOT_TOWN_STATE
-	@ 1: Met Rival
-	@ 2: Saving Birch
+	@ 1: Met Rival Set clock in house
+	@ 2: Saving Birch Encountered rival
 	@ 3: Received Pokedex
 	@ 4: Received Running Shoes
 
@@ -51,6 +51,19 @@ LittlerootTown_OnTransition:
 	call_if_eq VAR_LITTLEROOT_RIVAL_STATE, 3, LittlerootTown_EventScript_SetRivalLeftForRoute103
 	call_if_eq VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 1, LittlerootTown_EventScript_HideMapNamePopup
 	call_if_eq VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 2, LittlerootTown_EventScript_LeftLabAfterDexUpgrade
+	end
+
+LittlerootTown_EventScript_SeeRival::
+	lockall
+	applymovement 8, LittlerootTown_Movement_MayGreetPlayer
+	msgbox LittlerootTown_Text_MayLetsGetPokemon, MSGBOX_DEFAULT
+	closemessage
+	applymovement 8, LittlerootTown_Movement_MayWalkAway
+	waitmovement 0
+	setobjectxy 8, 25, 10
+	setobjectxyperm 8, 25, 10
+	releaseall
+	setvar VAR_LITTLEROOT_TOWN_STATE, 2
 	end
 
 LittlerootTown_EventScript_LeftLabAfterDexUpgrade::
@@ -199,6 +212,25 @@ LittlerootTown_Movement_PlayerEnterHouse:
 	walk_up
 	walk_up
 	step_end
+
+LittlerootTown_Movement_MayGreetPlayer:
+	face_up
+	step_end
+
+
+LittlerootTown_Movement_MayWalkAway:
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_up
+	walk_right
+	walk_right
+	step_end
+
 
 LittlerootTown_Movement_PlayerStepOffTruck:
 	jump_right
@@ -1018,4 +1050,11 @@ LittlerootTown_Text_BirchSomethingToShowYouAtLab:
 	.string "I gave you?\p"
 	.string "I have something to show you.\n"
 	.string "Let's go to my LAB.$"
+
+LittlerootTown_Text_MayLetsGetPokemon:
+	.string "Hey {PLAYER}!\p"
+	.string "The mailman came by and finally\n"
+	.string "Delivered our Pokémon.\p"
+	.string "Let's go choose which one\n"
+	.string "we want!$"
 
