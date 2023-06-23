@@ -44,6 +44,9 @@ LittlerootTown_OnTransition:
 	call Common_EventScript_SetupRivalGfxId
 	call_if_eq VAR_LITTLEROOT_INTRO_STATE, 2, LittlerootTown_EventScript_MoveMomToMaysDoor
 	call_if_unset FLAG_RESCUED_BIRCH, LittlerootTown_EventScript_SetTwinPos
+	call_if_eq VAR_LITTLEROOT_TOWN_STATE, 2, LittlerootTown_EventScript_SetRivalPositionBag
+	call_if_eq VAR_LITTLEROOT_TOWN_STATE, 3, LittlerootTown_EventScript_SetRivalPositionBag
+	call_if_eq VAR_LITTLEROOT_TOWN_STATE, 4, LittlerootTown_EventScript_SetRivalPositionBag
 	call_if_eq VAR_LITTLEROOT_TOWN_STATE, 3, LittlerootTown_EventScript_SetMomStandingInFrontOfDoorPos
 	call_if_eq VAR_LITTLEROOT_HOUSES_STATE_MAY, 4, LittlerootTown_EventScript_SetExitedHouseAfterLatiSSTicketEvent
 	call_if_eq VAR_LITTLEROOT_HOUSES_STATE_BRENDAN, 4, LittlerootTown_EventScript_SetExitedHouseAfterLatiSSTicketEvent
@@ -53,6 +56,10 @@ LittlerootTown_OnTransition:
 	call_if_eq VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 2, LittlerootTown_EventScript_LeftLabAfterDexUpgrade
 	end
 
+LittlerootTown_EventScript_SetRivalPositionBag::
+	setobjectxyperm 8, 24, 9
+	return
+
 LittlerootTown_EventScript_SeeRival::
 	lockall
 	applymovement 8, LittlerootTown_Movement_MayGreetPlayer
@@ -60,11 +67,172 @@ LittlerootTown_EventScript_SeeRival::
 	closemessage
 	applymovement 8, LittlerootTown_Movement_MayWalkAway
 	waitmovement 0
-	setobjectxy 8, 25, 10
-	setobjectxyperm 8, 25, 10
+	setobjectxy 8, 24, 9
+	setobjectxyperm 8, 24, 9
+	setobjectmovementtype 8, MOVEMENT_TYPE_FACE_RIGHT
 	releaseall
 	setvar VAR_LITTLEROOT_TOWN_STATE, 2
 	end
+
+LittlerootTown_EventScript_AtBag1::
+	applymovement 8, LittlerootTown_Movement_FaceLeft
+	msgbox LittlerootTown_Text_MayGetOverHere, MSGBOX_DEFAULT
+	closemessage
+	applymovement OBJ_EVENT_ID_PLAYER, LittlerootTown_Movement_PlayerApproachBag1
+	waitmovement 0
+	applymovement 8, LittlerootTown_Movement_FaceRight
+	msgbox LittlerootTown_Text_AccordingToTheMail, MSGBOX_DEFAULT
+	closemessage
+	applymovement 8, LittlerootTown_Movement_FaceDown
+	msgbox LittlerootTown_Text_YouFirst, MSGBOX_DEFAULT
+	closemessage
+	setvar VAR_LITTLEROOT_TOWN_STATE, 3
+	releaseall
+	end
+
+LittlerootTown_Movement_PlayerApproachBag1:
+	walk_right
+	walk_down
+	walk_right
+	walk_right
+	face_up
+	step_end
+
+LittlerootTown_EventScript_AtBag2::
+	applymovement 8, LittlerootTown_Movement_FaceLeft
+	msgbox LittlerootTown_Text_MayGetOverHere, MSGBOX_DEFAULT
+	closemessage
+	applymovement OBJ_EVENT_ID_PLAYER, LittlerootTown_Movement_PlayerApproachBag2
+	waitmovement 0
+	applymovement 8, LittlerootTown_Movement_FaceRight
+	msgbox LittlerootTown_Text_AccordingToTheMail, MSGBOX_DEFAULT
+	closemessage
+	applymovement 8, LittlerootTown_Movement_FaceDown
+	msgbox LittlerootTown_Text_YouFirst, MSGBOX_DEFAULT
+	closemessage
+	setvar VAR_LITTLEROOT_TOWN_STATE, 3
+	releaseall
+	end
+
+LittlerootTown_Movement_PlayerApproachBag2:
+	walk_right
+	walk_right
+	walk_right
+	face_up
+	step_end
+
+
+LittlerootTown_EventScript_AtBag3::
+	applymovement 8, LittlerootTown_Movement_FaceLeft
+	msgbox LittlerootTown_Text_MayGetOverHere, MSGBOX_DEFAULT
+	closemessage
+	applymovement OBJ_EVENT_ID_PLAYER, LittlerootTown_Movement_PlayerApproachBag3
+	waitmovement 0
+	applymovement 8, LittlerootTown_Movement_FaceRight
+	msgbox LittlerootTown_Text_AccordingToTheMail, MSGBOX_DEFAULT
+	closemessage
+	applymovement 8, LittlerootTown_Movement_FaceDown
+	msgbox LittlerootTown_Text_YouFirst, MSGBOX_DEFAULT
+	closemessage
+	setvar VAR_LITTLEROOT_TOWN_STATE, 3
+	releaseall
+	end
+
+LittlerootTown_Movement_PlayerApproachBag3:
+	walk_up
+	walk_right
+	walk_right
+	walk_right
+	face_up
+	step_end
+
+LittlerootTown_EventScript_MayDontLeavePlayer::
+	lockall
+	applymovement 8, LittlerootTown_Movement_FaceLeft
+	waitmovement 0
+	msgbox LittlerootTown_Text_DontLeavePlayer, MSGBOX_DEFAULT
+	closemessage
+	applymovement OBJ_EVENT_ID_PLAYER, LittlerootTown_Movement_PlayerReturnToBag
+	waitmovement 0 
+	applymovement 8, LittlerootTown_Movement_FaceRight
+	waitmovement 0
+	releaseall
+	end
+
+LittlerootTown_Movement_PlayerReturnToBag:
+	walk_right
+	step_end
+
+LittlerootTown_EventScript_GetPokemon::
+	lockall
+	setflag FLAG_SYS_POKEMON_GET
+	special ChooseStarter
+	waitstate
+	applymovement 8, LittlerootTown_Movement_FaceRight
+	waitmovement 0
+	call_if_eq VAR_STARTER_MON, 0, LittlerootTown_EventScript_MayChooseFennekin
+	call_if_eq VAR_STARTER_MON, 1, LittlerootTown_EventScript_MayChooseOshawott
+	call_if_eq VAR_STARTER_MON, 2, LittlerootTown_EventScript_MayChooseTurtwig
+	setvar VAR_LITTLEROOT_TOWN_STATE, 4
+	setflag FLAG_HIDE_ROUTE_101_BIRCH_STARTERS_BAG
+	hideobjectat 7, 0
+	releaseall
+	end
+
+LittlerootTown_EventScript_MayChooseFennekin::
+	msgbox LittlerootTown_Text_MayChooseFennekin, MSGBOX_DEFAULT
+	closemessage
+	return
+
+LittlerootTown_EventScript_MayChooseOshawott::
+	msgbox LittlerootTown_Text_MayChooseOshawott, MSGBOX_DEFAULT
+	closemessage
+	return
+
+LittlerootTown_EventScript_MayChooseTurtwig::
+	msgbox LittlerootTown_Text_MayChooseTurtwig, MSGBOX_DEFAULT
+	closemessage
+	return
+
+LittlerootTown_EventScript_LittleRootRivalFight::
+	applymovement 8, LittlerootTown_Movement_MayExclamation
+	waitmovement 0 
+	msgbox LittlerootTown_Text_HoldUpPlayer, MSGBOX_DEFAULT
+	closemessage
+	applymovement 8, LittlerootTown_Movement_MayWalkToPlayerFromBag
+	waitmovement 0
+	msgbox LittlerootTown_Text_NowWeHavePokemon, MSGBOX_DEFAULT
+	closemessage
+	call_if_eq VAR_STARTER_MON, 0, LittlerootTown_EventScript_StartMayBattleTurtwig
+	call_if_eq VAR_STARTER_MON, 1, LittlerootTown_EventScript_StartMayBattleFennnekin
+	call_if_eq VAR_STARTER_MON, 2, LittlerootTown_EventScript_StartMayBattleOshawott
+	setvar VAR_LITTLEROOT_TOWN_STATE, 5
+	special HealPlayerParty
+	end
+
+LittlerootTown_Movement_MayExclamation:
+	face_right
+	emote_exclamation_mark
+	step_end
+
+LittlerootTown_Movement_MayWalkToPlayerFromBag::
+	walk_down
+	walk_right
+	walk_right
+	step_end
+	
+
+LittlerootTown_EventScript_StartMayBattleTurtwig::
+	trainerbattle_no_intro TRAINER_MAY_ROUTE_103_TREECKO, LittlerootTown_Text_MayLoss
+	return
+
+LittlerootTown_EventScript_StartMayBattleFennnekin::
+	trainerbattle_no_intro TRAINER_MAY_ROUTE_103_TORCHIC, LittlerootTown_Text_MayLoss
+	return
+
+LittlerootTown_EventScript_StartMayBattleOshawott::
+	trainerbattle_no_intro TRAINER_MAY_ROUTE_103_MUDKIP, LittlerootTown_Text_MayLoss
+	return
 
 LittlerootTown_EventScript_LeftLabAfterDexUpgrade::
 	setvar VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 3
@@ -217,6 +385,17 @@ LittlerootTown_Movement_MayGreetPlayer:
 	face_up
 	step_end
 
+LittlerootTown_Movement_FaceLeft:
+	face_left
+	step_end
+
+LittlerootTown_Movement_FaceRight:
+	face_right
+	step_end
+
+LittlerootTown_Movement_FaceDown:
+	face_down
+	step_end
 
 LittlerootTown_Movement_MayWalkAway:
 	walk_right
@@ -226,7 +405,6 @@ LittlerootTown_Movement_MayWalkAway:
 	walk_right
 	walk_right
 	walk_right
-	walk_up
 	walk_right
 	walk_right
 	step_end
@@ -990,9 +1168,10 @@ LittlerootTown_Text_ComeHomeIfAnythingHappens:
 	.string "Go on, go get them, honey!$"
 
 LittlerootTown_Text_CanUsePCToStoreItems:
-	.string "If you use a PC, you can store items\n"
-	.string "and POKéMON.\p"
-	.string "The power of science is staggering!$"
+	.string "If you use a PC, you can find the\n"
+	.string "the decompiled source code for\l"
+	.string "POKéMON Emerald online.\p"
+	.string "The power of technology is staggering!$"
 
 LittlerootTown_Text_BirchSpendsDaysInLab:
 	.string "PROF. BIRCH spends days in his LAB\n"
@@ -1054,7 +1233,45 @@ LittlerootTown_Text_BirchSomethingToShowYouAtLab:
 LittlerootTown_Text_MayLetsGetPokemon:
 	.string "Hey {PLAYER}!\p"
 	.string "The mailman came by and finally\n"
-	.string "Delivered our Pokémon.\p"
+	.string "delivered our Pokémon.\p"
 	.string "Let's go choose which one\n"
 	.string "we want!$"
 
+LittlerootTown_Text_MayGetOverHere:
+	.string "{PLAYER}! Get over here!$"
+
+LittlerootTown_Text_AccordingToTheMail:
+	.string "According to the mail we got earlier,\n"
+	.string "our POKéMON should be in this bag.$"
+
+LittlerootTown_Text_YouFirst:
+	.string "I'll be generous and let you have\n"
+	.string "the first pick.$"
+
+LittlerootTown_Text_DontLeavePlayer:
+	.string "Hey, {PLAYER}! Where are you going?\p"
+	.string "Is this about having to pick first?\n"
+	.string "Come on, just get it over with!$"
+
+LittlerootTown_Text_MayChooseTurtwig:
+	.string "Perfect. I'll choose Turtwig then.$"
+
+LittlerootTown_Text_MayChooseFennekin:
+	.string "Perfect. I'll choose Fennekin then.$"
+	
+LittlerootTown_Text_MayChooseOshawott:
+	.string "Perfect. I'll choose Oshawott then.$"
+
+LittlerootTown_Text_HoldUpPlayer:
+	.string "Wait one second, {PLAYER}!$"
+
+LittlerootTown_Text_NowWeHavePokemon:
+	.string "Now that we have our own POKéMON,\n"
+	.string "We can finally battle, no online\l"
+	.string "simulators required!\p"
+	.string "Let's see who's the better trainer,\n"
+	.string "right out of the box!$"
+
+LittlerootTown_Text_MayLoss:
+	.string "What?! But I picked the better starter!\n"
+	.string "No fair!$"

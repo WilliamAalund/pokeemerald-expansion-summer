@@ -6,6 +6,8 @@ LittlerootTown_BrendansHouse_2F_MapScripts::
 	.byte 0
 
 LittlerootTown_BrendansHouse_2F_OnTransition:
+	goto_if_le VAR_LITTLEROOT_TOWN_STATE, setrespawn MAP_LITTLEROOT_TOWN_BRENDANS_HOUSE_2F
+	@ This respawn function will be annoying when the player can actually go to other towns, but it works for now. 
 	call_if_lt VAR_LITTLEROOT_RIVAL_STATE, 2, LittlerootTown_BrendansHouse_2F_EventScript_CheckSetReadyToMeetBrendan
 	call_if_ge VAR_LITTLEROOT_RIVAL_STATE, 3, LittlerootTown_BrendansHouse_2F_EventScript_CheckShouldUpdateBrendanPos
 	call_if_eq VAR_LITTLEROOT_INTRO_STATE, 4, PlayersHouse_2F_EventScript_BlockStairsUntilClockIsSet
@@ -127,6 +129,7 @@ LittlerootTown_BrendansHouse_2F_EventScript_MeetBrendanEast::
 	waitmovement 0
 	return
 
+
 LittlerootTown_BrendansHouse_2F_EventScript_CheckIfClockSet::
 	call_if_eq VAR_LITTLEROOT_TOWN_STATE, 0, LittlerootTown_BrendansHouse_2F_EventScript_SetClockMessage
 	releaseall
@@ -140,9 +143,7 @@ LittlerootTown_BrendansHouse_2F_EventScript_SetClockMessage::
 	return
 
 LittlerootTown_BrendansHouse_2F_Movement_BrendanEnters: 
-	walk_left
-	walk_left
-	face_up
+	walk_down
 	step_end
 
 LittlerootTown_BrendansHouse_2F_Movement_BrendanApproachPlayerNorth:

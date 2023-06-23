@@ -108,7 +108,7 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "Route101_EventScript_BirchsBag",
+      "script": "LittlerootTown_EventScript_GetPokemon",
       "flag": "FLAG_HIDE_ROUTE_101_BIRCH_STARTERS_BAG"
     },
     {
@@ -125,7 +125,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_TRUCK",
+      "graphics_id": "OBJ_EVENT_GFX_LINK_MAY",
       "x": 25,
       "y": 19,
       "elevation": 4,
@@ -138,7 +138,7 @@
       "flag": "FLAG_HIDE_LITTLEROOT_TOWN_BRENDANS_HOUSE_TRUCK"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_TRUCK",
+      "graphics_id": "OBJ_EVENT_GFX_LINK_MAY",
       "x": 28,
       "y": 19,
       "elevation": 4,
@@ -177,12 +177,12 @@
   "coord_events": [
     {
       "type": "trigger",
-      "x": 10,
-      "y": 1,
+      "x": 22,
+      "y": 11,
       "elevation": 3,
       "var": "VAR_LITTLEROOT_TOWN_STATE",
-      "var_value": "0",
-      "script": "LittlerootTown_EventScript_NeedPokemonTriggerLeft"
+      "var_value": "2",
+      "script": "LittlerootTown_EventScript_AtBag3"
     },
     {
       "type": "trigger",
@@ -208,8 +208,8 @@
       "y": 11,
       "elevation": 3,
       "var": "VAR_LITTLEROOT_TOWN_STATE",
-      "var_value": "3",
-      "script": "LittlerootTown_EventScript_GiveRunningShoesTrigger4"
+      "var_value": "4",
+      "script": "LittlerootTown_EventScript_LittleRootRivalFight"
     },
     {
       "type": "trigger",
@@ -217,8 +217,8 @@
       "y": 10,
       "elevation": 3,
       "var": "VAR_LITTLEROOT_TOWN_STATE",
-      "var_value": "3",
-      "script": "LittlerootTown_EventScript_GiveRunningShoesTrigger5"
+      "var_value": "4",
+      "script": "LittlerootTown_EventScript_LittleRootRivalFight"
     },
     {
       "type": "trigger",
@@ -226,8 +226,8 @@
       "y": 9,
       "elevation": 3,
       "var": "VAR_LITTLEROOT_TOWN_STATE",
-      "var_value": "3",
-      "script": "LittlerootTown_EventScript_GiveRunningShoesTrigger2"
+      "var_value": "4",
+      "script": "LittlerootTown_EventScript_LittleRootRivalFight"
     },
     {
       "type": "trigger",
@@ -235,26 +235,26 @@
       "y": 8,
       "elevation": 3,
       "var": "VAR_LITTLEROOT_TOWN_STATE",
-      "var_value": "3",
-      "script": "LittlerootTown_EventScript_GiveRunningShoesTrigger3"
+      "var_value": "4",
+      "script": "LittlerootTown_EventScript_LittleRootRivalFight"
     },
     {
       "type": "trigger",
-      "x": 10,
-      "y": 2,
+      "x": 22,
+      "y": 10,
       "elevation": 3,
       "var": "VAR_LITTLEROOT_TOWN_STATE",
-      "var_value": "3",
-      "script": "LittlerootTown_EventScript_GiveRunningShoesTrigger0"
+      "var_value": "2",
+      "script": "LittlerootTown_EventScript_AtBag2"
     },
     {
       "type": "trigger",
-      "x": 11,
-      "y": 2,
+      "x": 22,
+      "y": 9,
       "elevation": 3,
       "var": "VAR_LITTLEROOT_TOWN_STATE",
-      "var_value": "3",
-      "script": "LittlerootTown_EventScript_GiveRunningShoesTrigger1"
+      "var_value": "2",
+      "script": "LittlerootTown_EventScript_AtBag1"
     },
     {
       "type": "trigger",
@@ -282,6 +282,33 @@
       "var": "VAR_LITTLEROOT_TOWN_STATE",
       "var_value": "1",
       "script": "LittlerootTown_EventScript_SeeRival"
+    },
+    {
+      "type": "trigger",
+      "x": 21,
+      "y": 11,
+      "elevation": 0,
+      "var": "VAR_LITTLEROOT_TOWN_STATE",
+      "var_value": "3",
+      "script": "LittlerootTown_EventScript_MayDontLeavePlayer"
+    },
+    {
+      "type": "trigger",
+      "x": 21,
+      "y": 10,
+      "elevation": 0,
+      "var": "VAR_LITTLEROOT_TOWN_STATE",
+      "var_value": "3",
+      "script": "LittlerootTown_EventScript_MayDontLeavePlayer"
+    },
+    {
+      "type": "trigger",
+      "x": 21,
+      "y": 9,
+      "elevation": 0,
+      "var": "VAR_LITTLEROOT_TOWN_STATE",
+      "var_value": "3",
+      "script": "LittlerootTown_EventScript_MayDontLeavePlayer"
     }
   ],
   "bg_events": [
