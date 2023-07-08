@@ -29,6 +29,8 @@ LittlerootTown_ProfessorBirchsLab_MapScripts::
 LittlerootTown_ProfessorBirchsLab_OnTransition:
 	call Common_EventScript_SetupRivalGfxId
 	call ProfBirch_EventScript_UpdateLocation
+	clearflag FLAG_HIDE_LITTLEROOT_TOWN_BIRCHS_LAB_BIRCH
+	goto_if_set FLAG_ADVENTURE_STARTED, LittlerootTown_ProfessorBirchsLab_EventScript_SetStateTo2
 	goto_if_ge VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 6, LittlerootTown_ProfessorBirchsLab_EventScript_SetAfterJohtoStarterLayout
 	goto_if_ge VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 4, LittlerootTown_ProfessorBirchsLab_EventScript_SetJohtoStarterLayout
 	goto_if_eq VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 3, LittlerootTown_ProfessorBirchsLab_EventScript_CheckReadyForJohtoStarter
@@ -102,8 +104,9 @@ LittlerootTown_ProfessorBirchsLab_EventScript_SetObjectPosForJohtoStarters::
 	setobjectxy LOCALID_RIVAL, 5, 5
 	end
 
+@ First Map script state is changed so that it doesnt trigger, originally 2
 LittlerootTown_ProfessorBirchsLab_OnFrame:
-	map_script_2 VAR_BIRCH_LAB_STATE, 2, LittlerootTown_ProfessorBirchsLab_EventScript_GiveStarterEvent
+	map_script_2 VAR_BIRCH_LAB_STATE, 9, LittlerootTown_ProfessorBirchsLab_EventScript_GiveStarterEvent
 	map_script_2 VAR_BIRCH_LAB_STATE, 4, LittlerootTown_ProfessorBirchsLab_EventScript_GivePokedexEvent
 	map_script_2 VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 1, LittlerootTown_ProfessorBirchsLab_EventScript_UpgradeToNationalDex
 	map_script_2 VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 4, LittlerootTown_ProfessorBirchsLab_EventScript_ChooseJohtoStarter
@@ -278,8 +281,10 @@ LittlerootTown_ProfessorBirchsLab_EventScript_Aide::
 	faceplayer
 	goto_if_ge VAR_BIRCH_LAB_STATE, 3, LittlerootTown_ProfessorBirchsLab_EventScript_AideReceivedStarter
 	goto_if_set FLAG_BIRCH_AIDE_MET, LittlerootTown_ProfessorBirchsLab_EventScript_AideAlreadyMet
-	msgbox LittlerootTown_ProfessorBirchsLab_Text_BirchAwayOnFieldwork, MSGBOX_DEFAULT
-	setflag FLAG_BIRCH_AIDE_MET
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_DoYouWantAdvice, MSGBOX_YESNO
+	switch VAR_RESULT
+	case YES, LittlerootTown_ProfessorBirchsLab_EventScript_AnswerYes
+	case NO, LittlerootTown_ProfessorBirchsLab_EventScript_AnswerNo
 	release
 	end
 
@@ -999,3 +1004,183 @@ LittlerootTown_ProfessorBirchsLab_Text_ScottAboardSSTidalCall:
 	.string "we meet. I'll be waiting!\p"
 	.string "… … … … … …\n"
 	.string "… … … … … Click!$"
+
+@ New Scripting
+
+LittlerootTown_ProfessorBirchsLab_Text_LetsMeetProfessor:
+	.string "Hey {PLAYER}. Are you ready?\p"
+	.string "Let's go meet the professor.$"
+
+LittlerootTown_ProfessorBirchsLab_Text_ProfessorIntro:
+	.string "Hello, I am the professor.\p"
+	.string "You must be May... and you must be\n"
+	.string "{PLAYER}.\p"
+	.string "Congratulations on your acceptance\n"
+	.string "to the POKéMON research program!\p"
+	.string "Now that you are here in person, I will\n"
+	.string "provide you with some important\l"
+	.string "materials that will help you on your\l"
+	.string "journey. Firstly, the POKéDEX.$"
+
+LittlerootTown_ProfessorBirchsLab_Text_FurthermoreTakePokeballs:
+	.string "Now, in order to fill out that POKéDEX,\n"
+	.string "you will need tools to capture POKéMON.\p"
+	.string "Here, take these POKé BALLS.$"
+
+LittlerootTown_ProfessorBirchsLab_Text_ExplainPokeballs:
+	.string "I'm sure kids like you need no\n"
+	.string "introduction to POKé BALLS, but\l"
+	.string "I will explain them regardless.\p"
+	.string "POKé BALLS are what we use to capture\n"
+	.string "POKéMON.\p"
+	.string "Simply SELECT one from your bag, and\n"
+	.string "USE it to capture POKéMON\l"
+	.string "you find in the wild.\p"
+	.string "Stronger POKéMON may take more than a\n"
+	.string "single ball, however.\p"
+	.string "Talk to my associate for some advice\n"
+	.string "on how to effectively capture POKéMON.$"
+
+LittlerootTown_ProfessorBirchsLab_Text_MayOffToNextTown:
+	.string "Well, {PLAYER}, I'm off to PETALBURG CITY.\n"
+	.string "There, we can tackle the first gym.\p"
+	.string "Before I go, you should\n"
+	.string "have these.$"
+
+LittlerootTown_ProfessorBirchsLab_Text_PlayerGetRunningShoes:
+	.string "{PLAYER} switched shoes with the\n"
+	.string "RUNNING SHOES.$"
+
+LittlerootTown_ProfessorBirchsLab_Text_MayExplainRunningShoes:
+	.string "These will let you run if you press the\n"
+	.string "B button.\p"
+	.string "That's what the packaging says,\n"
+	.string "at least.$"
+
+LittlerootTown_ProfessorBirchsLab_Text_GoingForBadgesISee:
+	.string "Oho, going for the POKéMON gym challenge, I\n"
+	.string "see?\p"
+	.string "That is no easy feat for newly minted\n"
+	.string "researchers, such as yourselves.$"	
+
+LittlerootTown_ProfessorBirchsLab_Text_FirstIsEasy:
+	.string "Thats true, but how else will we get\n"
+	.string "strong enough to servey the rest of the\l"
+	.string "region?\p"
+	.string "Also... from what I've heard, the\n"
+	.string "PETALBURG CITY gym leader isn't the most\l"
+	.string "menacing gym leader out there.$"
+
+LittlerootTown_ProfessorBirchsLab_Text_ImOff:
+	.string "Well, I'm off. Talk to you later,\n"
+	.string "{PLAYER}.$"
+
+LittlerootTown_ProfessorBirchsLab_Text_DoYouWantAdvice:
+	.string "Hello {PLAYER}. Do you want some advice on\n"
+	.string "How to capture POKéMON?$"
+
+LittlerootTown_ProfessorBirchsLab_YesToAdvice:
+	.string "Alright then! I'll tell you what I know.\p"
+	.string "Firstly, although some POKéMON are\n"
+	.string "harder to catch than others, you should\l"
+	.string "aim to lower the HP, or health, of\l"
+	.string "a POKéMON you want to capture before\l"
+	.string "throwing a POKé BALL.\p"
+	.string "Weakened POKéMON are more easy to\n"
+	.string "capture than vigorous ones.\p"
+	.string "Additionally, status conditions, like\n"
+	.string "sleep or paralysis, will make POKéMON\l"
+	.string "even easier to catch.\p"
+	.string "Following these tips will improve your\n"
+	.string "chances of capturing wild POKéMON.\p"
+	.string "And no, before you ask, you cannot\n"
+	.string "capture another trainer's POKéMON.$"
+
+LittlerootTown_ProfessorBirchsLab_NoToAdvice:
+	.string "I see. Well, if you ever need advice, I am\n"
+	.string "Here for you, as a fellow researcher!$"
+
+LittlerootTown_ProfessorBirchsLab_EventScript_AnswerYes::
+	msgbox LittlerootTown_ProfessorBirchsLab_YesToAdvice, MSGBOX_DEFAULT
+	closemessage
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_AnswerNo::
+	msgbox LittlerootTown_ProfessorBirchsLab_NoToAdvice, MSGBOX_DEFAULT
+	closemessage
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_WalkToBirch::
+	lockall
+	applymovement 3, Common_Movement_FaceDown
+	waitmovement 0
+	applymovement 3, Common_Movement_ExclamationMark
+	waitmovement 0 
+	applymovement 3, LittlerootTown_ProfessorBirchsLab_Movement_MayWalkDown
+	waitmovement 0
+	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_FaceUp
+	waitmovement 0
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_LetsMeetProfessor, MSGBOX_DEFAULT
+	closemessage
+	applymovement 3, Common_Movement_FaceUp
+	waitmovement 0
+	applymovement 3, LittlerootTown_ProfessorBirchsLab_Movement_MayAndPlayerWalkUp
+	waitmovement 0
+	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkUp
+	waitmovement 0
+	applymovement OBJ_EVENT_ID_PLAYER, LittlerootTown_ProfessorBirchsLab_Movement_MayAndPlayerWalkUp
+	waitmovement 0 
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_ProfessorIntro, MSGBOX_DEFAULT
+	closemessage
+	call LittlerootTown_ProfessorBirchsLab_EventScript_ReceivePokedex
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_ExplainPokedex, MSGBOX_DEFAULT
+	closemessage
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_FurthermoreTakePokeballs, MSGBOX_DEFAULT
+	closemessage
+	giveitem ITEM_POKE_BALL, 5
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_ExplainPokeballs, MSGBOX_DEFAULT
+	closemessage
+	applymovement 3, Common_Movement_FaceLeft
+	waitmovement 0
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_MayOffToNextTown, MSGBOX_DEFAULT
+	closemessage
+	playfanfare MUS_OBTAIN_ITEM
+	message LittlerootTown_ProfessorBirchsLab_Text_PlayerGetRunningShoes
+	waitfanfare
+	setflag FLAG_RECEIVED_RUNNING_SHOES
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_MayExplainRunningShoes, MSGBOX_DEFAULT
+	closemessage
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_ImOff, MSGBOX_DEFAULT
+	closemessage
+	applymovement 3, LittlerootTown_ProfessorBirchsLab_Movement_MayWalkDown
+	waitmovement 0
+	applymovement 3, LittlerootTown_ProfessorBirchsLab_Movement_MayWalkDown
+	waitmovement 0
+	applymovement 3, LittlerootTown_ProfessorBirchsLab_Movement_MayWalkDown
+	waitmovement 0
+	hideobjectat 3, MAP_LITTLEROOT_TOWN_PROFESSOR_BIRCHS_LAB
+	setobjectxy 3, 1, 1
+	setvar VAR_OLDALE_TOWN_STATE, 1
+	setvar VAR_BIRCH_LAB_STATE, 1
+	setflag FLAG_ADVENTURE_STARTED
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_BIRCHS_LAB_RIVAL
+	setflag FLAG_SYS_B_DASH
+	releaseall
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_SetStateTo2::
+	setvar VAR_BIRCH_LAB_STATE, 2
+	end
+
+LittlerootTown_ProfessorBirchsLab_Movement_MayWalkDown:
+	walk_down
+	walk_down
+	step_end
+
+LittlerootTown_ProfessorBirchsLab_Movement_MayAndPlayerWalkUp:
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	step_end

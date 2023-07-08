@@ -14,7 +14,7 @@ Route102_EventScript_RouteSignPetalburg::
 	end
 
 Route102_EventScript_Boy::
-	msgbox Route102_Text_CatchWholeBunchOfPokemon, MSGBOX_NPC
+	msgbox Route102_Text_BoyCatchRareBaby, MSGBOX_NPC
 	end
 
 Route102_EventScript_Calvin::
@@ -107,3 +107,13 @@ Route102_Text_RouteSignOldale:
 Route102_Text_RouteSignPetalburg:
 	.string "ROUTE 102\n"
 	.string "{LEFT_ARROW} PETALBURG CITY$"
+
+@ New scripts start here
+
+Route102_Text_WatchingMyBrother:
+	.string "I'm watching my big brother catch\n"
+	.string "POKéMON!$"
+
+Route102_Text_BoyCatchRareBaby:
+	.string "I want to catch the rare baby\n"
+	.string "POKéMON that lives on this route.$"
