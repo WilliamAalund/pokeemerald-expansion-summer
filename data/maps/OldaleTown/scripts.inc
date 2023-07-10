@@ -6,12 +6,13 @@ OldaleTown_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, OldaleTown_OnTransition
 	.byte 0
 
+@ removed call_if_set FLAG_ADVENTURE_STARTED, OldaleTown_EventScript_SetOldaleState
+@ removed call_if_unset FLAG_ADVENTURE_STARTED, OldaleTown_EventScript_BlockWestEntrance
 OldaleTown_OnTransition:
 	call Common_EventScript_SetupRivalGfxId
 	setflag FLAG_VISITED_OLDALE_TOWN
-	call_if_unset FLAG_ADVENTURE_STARTED, OldaleTown_EventScript_BlockWestEntrance
-	call_if_unset FLAG_RECEIVED_POTION_OLDALE, OldaleTown_EventScript_MoveMartEmployee
-	call_if_set FLAG_ADVENTURE_STARTED, OldaleTown_EventScript_SetOldaleState
+	goto_if_eq VAR_OLDALE_TOWN_STATE, 1, OldaleTown_EventScript_MoveClerkToRoad
+	call_if_set FLAG_RECEIVED_POTION_OLDALE, OldaleTown_EventScript_MoveMartEmployee
 	end
 
 @ This script seems pointless because nothing uses VAR_OLDALE_TOWN_STATE
@@ -34,8 +35,8 @@ OldaleTown_EventScript_TownSign::
 	end
 
 OldaleTown_EventScript_Girl::
-	msgbox OldaleTown_Text_SavingMyProgress, MSGBOX_NPC
-	end
+	msgbox OldaleTown_Text_GirlGreetPlayer, MSGBOX_NPC
+	return
 
 OldaleTown_EventScript_MartEmployee::
 	lock
@@ -399,3 +400,181 @@ OldaleTown_Text_TownSign:
 	.string "OLDALE TOWN\n"
 	.string "“Where things start off scarce.”$"
 
+@ Beginning of new scripts
+OldaleTown_Text_GirlGreetPlayer:
+	.string "Hey {PLAYER}!\p"
+	.string "I saw your friend head into the\n"
+	.string "professor's lab.\p"
+	.string "You should go catch up with her.$"
+
+OldaleTown_Text_GirlAskPokedex:
+	.string "So, {PLAYER}, you have a POKéDEX\n"
+	.string "now, don't you?\p"
+	.string "You've got to show it to me sometime!$"
+
+OldaleTown_Text_OldaleClerkSorry:
+	.string "Oh, did you want to enter the \n"
+	.string "POKéMON MART?\p"
+	.string "Sorry, we're still getting set up.$"
+
+OldaleTown_Text_OldaleClerkWelcome:
+	.string "Welcome to our POKéMON MART!\p"
+	.string "We sell all sorts of must have items\n"
+	.string "for trainers like you!$"
+
+OldaleTown_Text_OldaleClerkGreetPlayer:
+	.string "Hello! Are you by chance a new\n"
+	.string "trainer?\p"
+	.string "Our POKéMON MART just opened up. You\n"
+	.string "should check out the supplies we\l"
+	.string "have on offer!$"
+
+OldaleTown_EventScript_GirlBlockPath1::
+	lockall
+	applymovement 1, Common_Movement_ExclamationMark
+	waitmovement 0 
+	applymovement 1, OldaleTown_Movement_GirlDown1
+	waitmovement 0
+	applymovement 1, Common_Movement_FaceLeft
+	waitmovement 0
+	msgbox OldaleTown_Text_GirlGreetPlayer, MSGBOX_DEFAULT
+	closemessage
+	applymovement 1, Common_Movement_WalkUp
+	waitmovement 0
+	applymovement 1, Common_Movement_FaceDown
+	waitmovement 0
+	applymovement OBJ_EVENT_ID_PLAYER, OldaleTown_Movement_PlayerLeft
+	waitmovement 0
+	end
+
+OldaleTown_Movement_PlayerLeft:
+	walk_left
+	step_end
+
+OldaleTown_Movement_GirlDown1:
+	walk_down
+	face_left
+	step_end
+
+OldaleTown_EventScript_GirlBlockPath2::
+	lockall
+	applymovement 1, Common_Movement_ExclamationMark
+	waitmovement 0 
+	applymovement 1, OldaleTown_Movement_GirlDown2
+	waitmovement 0
+	applymovement 1, Common_Movement_FaceLeft
+	msgbox OldaleTown_Text_GirlGreetPlayer, MSGBOX_DEFAULT
+	closemessage
+	applymovement 1, Common_Movement_WalkUp2
+	waitmovement 0
+	applymovement 1, Common_Movement_FaceDown
+	waitmovement 0
+	applymovement OBJ_EVENT_ID_PLAYER, OldaleTown_Movement_PlayerLeft
+	waitmovement 0
+	end
+
+OldaleTown_Movement_GirlDown2:
+	walk_down
+	walk_down
+	face_left
+	step_end
+
+OldaleTown_EventScript_GirlBlockPath3::
+	lockall
+	applymovement 1, Common_Movement_ExclamationMark
+	waitmovement 0 
+	applymovement 1, OldaleTown_Movement_GirlDown3
+	waitmovement 0
+	applymovement 1, Common_Movement_FaceLeft
+	msgbox OldaleTown_Text_GirlGreetPlayer, MSGBOX_DEFAULT
+	closemessage
+	applymovement 1, OldaleTown_Movement_GirlUp3
+	waitmovement 0
+	applymovement OBJ_EVENT_ID_PLAYER, OldaleTown_Movement_PlayerLeft
+	waitmovement 0
+	end
+
+OldaleTown_Movement_GirlDown3:
+	walk_down
+	walk_down
+	walk_down
+	face_left
+	step_end
+
+OldaleTown_Movement_GirlUp3:
+	walk_up
+	walk_up
+	walk_up
+	face_down
+	step_end
+
+OldaleTown_Movement_ClerkLeft:
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	step_end
+
+OldaleTown_Movement_ClerkRight:
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	step_end
+
+OldaleTown_Movement_PlayerLookLeft:
+	face_left
+	step_end
+
+OldaleTown_EventScript_Route2Girl::
+	call_if_eq VAR_OLDALE_TOWN_STATE, 0, OldaleTown_EventScript_Girl
+	call_if_eq VAR_OLDALE_TOWN_STATE, 1, OldaleTown_EventScript_GirlAfterPokedex
+	closemessage
+	applymovement 1, Common_Movement_FaceDown
+	end
+
+OldaleTown_EventScript_GirlAfterPokedex::
+	msgbox OldaleTown_Text_GirlAskPokedex, MSGBOX_NPC
+	return
+
+OldaleTown_EventScript_OldaleClerk::
+	call_if_eq VAR_OLDALE_TOWN_STATE, 0, OldaleTown_EventScript_OldaleClerkSorry
+	call_if_ge VAR_OLDALE_TOWN_STATE, 1, OldaleTown_EventScript_OldaleClerkWelcome
+	end
+
+OldaleTown_EventScript_OldaleClerkSorry::
+	msgbox OldaleTown_Text_OldaleClerkSorry, MSGBOX_NPC
+	closemessage
+	applymovement 2, Common_Movement_FaceDown
+	return
+
+OldaleTown_EventScript_OldaleClerkWelcome::
+	msgbox OldaleTown_Text_OldaleClerkWelcome, MSGBOX_NPC
+	closemessage
+	return
+
+OldaleTown_EventScript_OldaleClerkGreetPlayer::
+	lockall
+	applymovement LOCALID_MART_EMPLOYEE, Common_Movement_ExclamationMark
+	waitmovement 0
+	applymovement LOCALID_MART_EMPLOYEE, OldaleTown_Movement_ClerkRight
+	waitmovement 0
+	applymovement OBJ_EVENT_ID_PLAYER, OldaleTown_Movement_PlayerLookLeft
+	waitmovement 0
+	msgbox OldaleTown_Text_OldaleClerkGreetPlayer, MSGBOX_NPC
+	closemessage
+	applymovement LOCALID_MART_EMPLOYEE, OldaleTown_Movement_ClerkLeft
+	waitmovement 0
+	setobjectxy LOCALID_MART_EMPLOYEE, 4, 15
+	setobjectxyperm LOCALID_MART_EMPLOYEE, 4, 15
+	applymovement LOCALID_MART_EMPLOYEE, Common_Movement_FaceDown
+	setvar VAR_OLDALE_TOWN_STATE, 2
+	end
+
+OldaleTown_EventScript_MoveClerkToRoad::
+	setobjectxyperm LOCALID_MART_EMPLOYEE, 10, 13
+	setobjectmovementtype LOCALID_MART_EMPLOYEE, MOVEMENT_TYPE_FACE_DOWN
+	return

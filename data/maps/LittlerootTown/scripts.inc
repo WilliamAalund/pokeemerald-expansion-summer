@@ -48,6 +48,7 @@ LittlerootTown_OnTransition:
 	call_if_eq VAR_LITTLEROOT_TOWN_STATE, 3, LittlerootTown_EventScript_SetRivalPositionBag
 	call_if_eq VAR_LITTLEROOT_TOWN_STATE, 4, LittlerootTown_EventScript_SetRivalPositionBag
 	call_if_eq VAR_LITTLEROOT_TOWN_STATE, 3, LittlerootTown_EventScript_SetMomStandingInFrontOfDoorPos
+	call_if_eq VAR_LITTLEROOT_TOWN_STATE, 1, LittlerootTown_EventScript_ShowRival
 	call_if_eq VAR_LITTLEROOT_HOUSES_STATE_MAY, 4, LittlerootTown_EventScript_SetExitedHouseAfterLatiSSTicketEvent
 	call_if_eq VAR_LITTLEROOT_HOUSES_STATE_BRENDAN, 4, LittlerootTown_EventScript_SetExitedHouseAfterLatiSSTicketEvent
 	call_if_eq VAR_OLDALE_RIVAL_STATE, 1, LittlerootTown_EventScript_MoveRivalFromOldale
@@ -59,6 +60,14 @@ LittlerootTown_OnTransition:
 LittlerootTown_EventScript_SetRivalPositionBag::
 	setobjectxyperm 8, 24, 9
 	return
+
+LittlerootTown_EventScript_ShowRival::
+	clearflag FLAG_HIDE_LITTLEROOT_TOWN_RIVAL
+	clearflag FLAG_HIDE_LITTLEROOT_TOWN_FAT_MAN
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_BRENDANS_HOUSE_TRUCK
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_TRUCK
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_MOM_OUTSIDE
+	end
 
 LittlerootTown_EventScript_SeeRival::
 	lockall
@@ -123,6 +132,7 @@ LittlerootTown_Movement_PlayerApproachBag2:
 
 
 LittlerootTown_EventScript_AtBag3::
+	lockall
 	applymovement 8, LittlerootTown_Movement_FaceLeft
 	msgbox LittlerootTown_Text_MayGetOverHere, MSGBOX_DEFAULT
 	closemessage
@@ -175,7 +185,9 @@ LittlerootTown_EventScript_GetPokemon::
 	call_if_eq VAR_STARTER_MON, 2, LittlerootTown_EventScript_MayChooseTurtwig
 	setvar VAR_LITTLEROOT_TOWN_STATE, 4
 	setflag FLAG_HIDE_ROUTE_101_BIRCH_STARTERS_BAG
-	hideobjectat 7, 0
+	hideobjectat 7, MAP_LITTLEROOT_TOWN
+	setobjectxy 7, 24, 1
+	setobjectxyperm 7, 24, 1
 	releaseall
 	end
 
@@ -195,6 +207,7 @@ LittlerootTown_EventScript_MayChooseTurtwig::
 	return
 
 LittlerootTown_EventScript_LittleRootRivalFight::
+	lockall
 	applymovement 8, LittlerootTown_Movement_MayExclamation
 	waitmovement 0 
 	msgbox LittlerootTown_Text_HoldUpPlayer, MSGBOX_DEFAULT
@@ -208,6 +221,18 @@ LittlerootTown_EventScript_LittleRootRivalFight::
 	call_if_eq VAR_STARTER_MON, 2, LittlerootTown_EventScript_StartMayBattleOshawott
 	setvar VAR_LITTLEROOT_TOWN_STATE, 5
 	special HealPlayerParty
+	msgbox LittlerootTown_Text_MayStillLost, MSGBOX_DEFAULT
+	closemessage
+	applymovement 8, LittlerootTown_Movement_MayWalkAway
+	waitmovement 0
+	setobjectxy 8, 12, 6
+	waitmovement 0 
+	hideobjectat 8, MAP_LITTLEROOT_TOWN
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_RIVAL
+	setflag FLAG_HIDE_ROUTE_101_BIRCH
+	setflag FLAG_HIDE_ROUTE_101_ZIGZAGOON
+	setflag FLAG_HIDE_ROUTE_101_BIRCH_ZIGZAGOON_BATTLE
+	releaseall
 	end
 
 LittlerootTown_Movement_MayExclamation:
@@ -220,7 +245,7 @@ LittlerootTown_Movement_MayWalkToPlayerFromBag::
 	walk_right
 	walk_right
 	step_end
-	
+
 
 LittlerootTown_EventScript_StartMayBattleTurtwig::
 	trainerbattle_no_intro TRAINER_MAY_ROUTE_103_TREECKO, LittlerootTown_Text_MayLoss
@@ -262,7 +287,7 @@ LittlerootTown_EventScript_MoveMomToMaysDoor::
 
 LittlerootTown_EventScript_SetTwinPos::
 	goto_if_eq VAR_LITTLEROOT_TOWN_STATE, 0, LittlerootTown_EventScript_SetTwinGuardingRoutePos
-	setobjectxyperm LOCALID_TWIN, 10, 1
+	setobjectxyperm LOCALID_TWIN, 12, 16
 	setobjectmovementtype LOCALID_TWIN, MOVEMENT_TYPE_FACE_UP
 	return
 
@@ -1168,10 +1193,10 @@ LittlerootTown_Text_ComeHomeIfAnythingHappens:
 	.string "Go on, go get them, honey!$"
 
 LittlerootTown_Text_CanUsePCToStoreItems:
+	.string "The power of technology is staggering!\p"
 	.string "If you use a PC, you can find the\n"
 	.string "the decompiled source code for\l"
-	.string "POKéMON Emerald online.\p"
-	.string "The power of technology is staggering!$"
+	.string "POKéMON Emerald online.$"
 
 LittlerootTown_Text_BirchSpendsDaysInLab:
 	.string "PROF. BIRCH spends days in his LAB\n"
@@ -1273,5 +1298,12 @@ LittlerootTown_Text_NowWeHavePokemon:
 	.string "right out of the box!$"
 
 LittlerootTown_Text_MayLoss:
-	.string "What?! But I picked the better starter!\n"
+	.string "What?! But I picked the right type!\n"
 	.string "No fair!$"
+
+LittlerootTown_Text_MayStillLost:
+	.string "Perfect. Even with a type advantage, I\n"
+	.string "still end up losing.\p"
+	.string "In any case, I'll heal your POKéMON, then\n"
+	.string "I'm off to the town ahead.\p"
+	.string "See you ahead, {PLAYER}.$"
