@@ -26,7 +26,7 @@ OldaleTown_EventScript_BlockWestEntrance::
 	return
 
 OldaleTown_EventScript_MoveMartEmployee::
-	setobjectxyperm LOCALID_MART_EMPLOYEE, 13, 14
+	setobjectxyperm LOCALID_MART_EMPLOYEE, 4, 15
 	setobjectmovementtype LOCALID_MART_EMPLOYEE, MOVEMENT_TYPE_FACE_DOWN
 	return
 
@@ -570,6 +570,7 @@ OldaleTown_EventScript_OldaleClerkGreetPlayer::
 	waitmovement 0
 	setobjectxy LOCALID_MART_EMPLOYEE, 4, 15
 	setobjectxyperm LOCALID_MART_EMPLOYEE, 4, 15
+	setflag FLAG_RECEIVED_POTION_OLDALE
 	applymovement LOCALID_MART_EMPLOYEE, Common_Movement_FaceDown
 	setvar VAR_OLDALE_TOWN_STATE, 2
 	end
